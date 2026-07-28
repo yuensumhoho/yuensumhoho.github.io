@@ -243,11 +243,12 @@
             transform: translateY(0);
         }
 
+        .nav-card.portfolios { grid-column: span 3; }
         .nav-card.experience { grid-column: span 3; } 
         .nav-card.education { grid-column: span 3; } 
         .nav-card.skills { grid-column: span 3; }
         .nav-card.mbti { grid-column: span 3; }
-        .nav-card.contact { grid-column: span 6; }
+        .nav-card.contact { grid-column: span 3; }
 
         .nav-card svg { width: 40px; height: 40px; fill: rgba(255,255,255,0.7); transition: fill 0.3s; }
         .nav-card span { font-size: 1.1rem; font-weight: 500; z-index: 2; }
@@ -260,6 +261,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
+        .nav-card.portfolios:hover svg { fill: #FF9F0A; filter: drop-shadow(0 0 8px #FF9F0A); }
         .nav-card.experience:hover svg { fill: #AF52DE; filter: drop-shadow(0 0 8px #AF52DE); }
         .nav-card.education:hover svg { fill: #30B0C7; filter: drop-shadow(0 0 8px #30B0C7); }
         .nav-card.skills:hover svg { fill: #2997FF; filter: drop-shadow(0 0 8px #2997FF); }
@@ -279,6 +281,32 @@
         .download-btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; transition: all 0.3s; cursor: pointer; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
         .download-btn svg { width: 20px; height: 20px; fill: var(--text-primary); }
         .download-btn:hover { background: var(--accent-color); transform: scale(1.1); border-color: var(--accent-color); }
+
+        /* Portfolios */
+        .portfolio-section { max-width: 1000px; }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; margin-top: 60px; }
+        .portfolio-card { position: relative; min-height: 320px; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; background: var(--card-bg); color: #fff; font: inherit; text-align: left; cursor: pointer; box-shadow: 0 16px 40px rgba(0,0,0,0.35); isolation: isolate; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s; }
+        .portfolio-card:hover, .portfolio-card:focus-visible { transform: translateY(-8px); border-color: rgba(255,255,255,0.35); box-shadow: 0 24px 55px rgba(0,0,0,0.5); outline: none; }
+        .portfolio-preview { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; opacity: 0.72; transform: scale(1); transition: opacity 0.45s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1); z-index: -2; }
+        .portfolio-card:hover .portfolio-preview, .portfolio-card:focus-visible .portfolio-preview { opacity: 0.88; transform: scale(1.025); }
+        .portfolio-card::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0,0,0,0.08) 15%, rgba(0,0,0,0.92) 100%); }
+        .portfolio-card-content { position: absolute; inset: auto 0 0; padding: 28px; }
+        .portfolio-card-kicker { display: block; margin-bottom: 8px; color: #d2d2d7; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+        .portfolio-card-title { display: block; max-width: 90%; font-size: 1.45rem; font-weight: 650; line-height: 1.2; }
+        .portfolio-card-action { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; color: #fff; font-size: 0.9rem; opacity: 0.75; transition: opacity 0.3s, transform 0.3s; }
+        .portfolio-card:hover .portfolio-card-action, .portfolio-card:focus-visible .portfolio-card-action { opacity: 1; transform: translateX(4px); }
+
+        .portfolio-modal { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 28px; visibility: hidden; opacity: 0; background: rgba(0,0,0,0.78); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transition: opacity 0.35s ease, visibility 0.35s; }
+        .portfolio-modal.open { visibility: visible; opacity: 1; }
+        .portfolio-dialog { width: min(1100px, 100%); height: min(88vh, 900px); display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(255,255,255,0.18); border-radius: 24px; background: #151515; box-shadow: 0 30px 90px rgba(0,0,0,0.7); transform: translateY(28px) scale(0.97); opacity: 0; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
+        .portfolio-modal.open .portfolio-dialog { transform: translateY(0) scale(1); opacity: 1; }
+        .portfolio-modal-header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .portfolio-modal-title { flex: 1; overflow: hidden; font-size: 1.05rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+        .portfolio-modal-action { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 16px; border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; background: rgba(255,255,255,0.08); color: #fff; font: inherit; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: background 0.25s, transform 0.25s; }
+        .portfolio-modal-action:hover { background: var(--accent-color); transform: translateY(-2px); }
+        .portfolio-modal-close { width: 42px; padding: 0; font-size: 1.5rem; line-height: 1; }
+        .portfolio-viewer { flex: 1; width: 100%; border: 0; background: #2a2a2a; }
+        body.modal-open { overflow: hidden; }
 
         /* Timeline */
         .timeline { position: relative; padding-left: 40px; }
@@ -314,6 +342,10 @@
 
         @media (max-width: 768px) {
             .skills-container { grid-template-columns: 1fr; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .portfolio-modal { padding: 10px; }
+            .portfolio-dialog { height: 92vh; border-radius: 18px; }
+            .portfolio-modal-header { padding: 12px; }
         }
 
         /* MBTI */
@@ -364,6 +396,7 @@
 
     <nav id="floating-nav" class="floating-nav">
         <div id="nav-indicator" class="nav-indicator"></div>
+        <a href="#portfolios">Portfolios</a>
         <a href="#experience">Work Experience</a>
         <a href="#education">Education</a>
         <a href="#skills">Skills</a>
@@ -385,6 +418,10 @@
         <h2 id="nav-question" class="nav-question"></h2>
         
         <div id="nav-grid" class="nav-grid">
+            <a href="#portfolios" class="nav-card portfolios">
+                <svg viewBox="0 0 24 24"><path d="M20 4h-8l-2-2H4c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 16H4V6h16v14zm-2-9H6v2h12v-2zm-4 4H6v2h8v-2z"/></svg>
+                <span>Portfolios</span>
+            </a>
             <a href="#experience" class="nav-card experience">
                 <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
                 <span>Work Experience</span>
@@ -405,6 +442,30 @@
                 <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                 <span>Contact</span>
             </a>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section class="section portfolio-section" id="portfolios">
+        <h2 class="section-title">Portfolios</h2>
+        <div class="portfolio-grid">
+            <button type="button" class="portfolio-card" data-pdf="pdfs/ysh%20portfolio.pdf" data-title="Pattern Cutting as a Design Method" aria-haspopup="dialog">
+                <img src="images/ysh-portfolio-preview.png" alt="" class="portfolio-preview">
+                <span class="portfolio-card-content">
+                    <span class="portfolio-card-kicker">Portfolio · 25 pages</span>
+                    <span class="portfolio-card-title">Pattern Cutting as a Design Method</span>
+                    <span class="portfolio-card-action">Preview portfolio <span aria-hidden="true">→</span></span>
+                </span>
+            </button>
+            <button type="button" class="portfolio-card" data-pdf="pdfs/TAD-YSH-CAPE-TECHPACK.pdf" data-title="CAPE Technical Pack" aria-haspopup="dialog">
+                <img src="images/cape-techpack-preview.png" alt="" class="portfolio-preview">
+                <span class="portfolio-card-content">
+                    <span class="portfolio-card-kicker">Technical pack · 8 pages</span>
+                    <span class="portfolio-card-title">CAPE Technical Pack</span>
+                    <span class="portfolio-card-action">Preview technical pack <span aria-hidden="true">→</span></span>
+                </span>
+            </button>
         </div>
     </section>
 
@@ -616,6 +677,16 @@
         </div>
     </section>
 
+    <div class="portfolio-modal" id="portfolio-modal" role="dialog" aria-modal="true" aria-labelledby="portfolio-modal-title" aria-hidden="true">
+        <div class="portfolio-dialog">
+            <div class="portfolio-modal-header">
+                <div class="portfolio-modal-title" id="portfolio-modal-title">Portfolio</div>
+                <button type="button" class="portfolio-modal-action portfolio-modal-close" id="portfolio-modal-close" aria-label="Close portfolio viewer">&times;</button>
+            </div>
+            <iframe class="portfolio-viewer" id="portfolio-viewer" title="Portfolio PDF viewer"></iframe>
+        </div>
+    </div>
+
     <script>
         // --- 1. Hero Typewriter (Hello) ---
         const helloText = "Hey there, I'm Sum.";
@@ -674,6 +745,7 @@
         const navHub = document.querySelector('.nav-hub');
         const navIndicator = document.getElementById('nav-indicator');
         const sectionsToSpy = [
+            document.getElementById('portfolios'),
             document.getElementById('experience'),
             document.getElementById('education'),
             document.getElementById('skills'),
@@ -750,6 +822,51 @@
         function toggleCard(card) {
             card.classList.toggle('active');
         }
+
+        // --- 5. Portfolio Viewer ---
+        const portfolioModal = document.getElementById('portfolio-modal');
+        const portfolioViewer = document.getElementById('portfolio-viewer');
+        const portfolioTitle = document.getElementById('portfolio-modal-title');
+        const portfolioClose = document.getElementById('portfolio-modal-close');
+        let lastPortfolioTrigger = null;
+
+        function openPortfolio(card) {
+            const pdf = card.dataset.pdf;
+            const title = card.dataset.title;
+            lastPortfolioTrigger = card;
+            portfolioTitle.textContent = title;
+            portfolioViewer.src = `${pdf}#view=FitH`;
+            portfolioViewer.title = `${title} PDF viewer`;
+            portfolioModal.classList.add('open');
+            portfolioModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+            requestAnimationFrame(() => portfolioClose.focus());
+        }
+
+        function closePortfolio() {
+            portfolioModal.classList.remove('open');
+            portfolioModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+            setTimeout(() => {
+                if (!portfolioModal.classList.contains('open')) portfolioViewer.src = '';
+            }, 350);
+            if (lastPortfolioTrigger) lastPortfolioTrigger.focus();
+        }
+
+        document.querySelectorAll('.portfolio-card').forEach(card => {
+            card.addEventListener('click', () => openPortfolio(card));
+        });
+
+        portfolioClose.addEventListener('click', closePortfolio);
+        portfolioModal.addEventListener('click', event => {
+            if (event.target === portfolioModal) closePortfolio();
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && portfolioModal.classList.contains('open')) {
+                closePortfolio();
+            }
+        });
     </script>
 </body>
 </html>
