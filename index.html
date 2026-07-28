@@ -404,6 +404,9 @@
         .portfolio-modal-action:hover { background: var(--accent-color); transform: translateY(-2px); }
         .portfolio-modal-close { width: 42px; padding: 0; font-size: 1.5rem; line-height: 1; }
         .portfolio-viewer { flex: 1; width: 100%; border: 0; background: #2a2a2a; }
+        .portfolio-page-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 10px; background: #242424; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+        .portfolio-page-image { display: block; width: 100%; height: auto; flex: 0 0 auto; background: #fff; box-shadow: 0 4px 18px rgba(0,0,0,0.35); }
+        .portfolio-viewer[hidden], .portfolio-page-list[hidden] { display: none; }
         body.modal-open { overflow: hidden; }
 
         /* Timeline */
@@ -444,7 +447,7 @@
             .skills-container { grid-template-columns: 1fr; }
             .portfolio-grid { grid-template-columns: 1fr; }
             .portfolio-modal { padding: 10px; }
-            .portfolio-dialog { height: 92vh; border-radius: 18px; }
+            .portfolio-dialog { height: 92vh; height: 92dvh; border-radius: 18px; }
             .portfolio-modal-header { padding: 12px; }
         }
 
@@ -571,7 +574,7 @@
     <section class="section portfolio-section" id="portfolio">
         <h2 class="section-title">Portfolio</h2>
         <div class="portfolio-grid">
-            <button type="button" class="portfolio-card" data-pdf="pdfs/ysh%20portfolio.pdf" data-title="Pattern Cutting as a Design Method" aria-haspopup="dialog">
+            <button type="button" class="portfolio-card" data-pdf="pdfs/ysh%20portfolio.pdf" data-title="Pattern Cutting as a Design Method" data-pages="25" data-page-prefix="images/portfolio-pages/ysh/page-" aria-haspopup="dialog">
                 <img src="images/ysh-portfolio-preview.png" alt="" class="portfolio-preview">
                 <span class="portfolio-card-content">
                     <span class="portfolio-card-kicker">Portfolio · 25 pages</span>
@@ -579,7 +582,7 @@
                     <span class="portfolio-card-action">Preview Pattern Cutting as a Design Method <span aria-hidden="true">→</span></span>
                 </span>
             </button>
-            <button type="button" class="portfolio-card" data-pdf="pdfs/TAD-YSH-CAPE-TECHPACK.pdf" data-title="Tech Pack" aria-haspopup="dialog">
+            <button type="button" class="portfolio-card" data-pdf="pdfs/TAD-YSH-CAPE-TECHPACK.pdf" data-title="Tech Pack" data-pages="8" data-page-prefix="images/portfolio-pages/tech-pack/page-" aria-haspopup="dialog">
                 <img src="images/cape-techpack-preview.png" alt="" class="portfolio-preview">
                 <span class="portfolio-card-content">
                     <span class="portfolio-card-kicker">Technical pack · 8 pages</span>
@@ -805,6 +808,7 @@
                 <button type="button" class="portfolio-modal-action portfolio-modal-close" id="portfolio-modal-close" aria-label="Close portfolio viewer">&times;</button>
             </div>
             <iframe class="portfolio-viewer" id="portfolio-viewer" title="Portfolio PDF viewer"></iframe>
+            <div class="portfolio-page-list" id="portfolio-page-list" aria-label="Scrollable portfolio pages" hidden></div>
         </div>
     </div>
 
@@ -1111,6 +1115,7 @@
         // --- 6. Portfolio Viewer ---
         const portfolioModal = document.getElementById('portfolio-modal');
         const portfolioViewer = document.getElementById('portfolio-viewer');
+        const portfolioPageList = document.getElementById('portfolio-page-list');
         const portfolioTitle = document.getElementById('portfolio-modal-title');
         const portfolioClose = document.getElementById('portfolio-modal-close');
         let lastPortfolioTrigger = null;
@@ -1118,10 +1123,39 @@
         function openPortfolio(card) {
             const pdf = card.dataset.pdf;
             const title = card.dataset.title;
+            const usePageImages = window.matchMedia('(max-width: 900px)').matches;
             lastPortfolioTrigger = card;
             portfolioTitle.textContent = title;
-            portfolioViewer.src = `${pdf}#view=FitH`;
-            portfolioViewer.title = `${title} PDF viewer`;
+
+            if (usePageImages) {
+                const pageCount = Number(card.dataset.pages);
+                const pagePrefix = card.dataset.pagePrefix;
+                const pages = document.createDocumentFragment();
+
+                for (let pageNumber = 1; pageNumber <= pageCount; pageNumber++) {
+                    const pageImage = document.createElement('img');
+                    const paddedPageNumber = String(pageNumber).padStart(2, '0');
+                    pageImage.src = `${pagePrefix}${paddedPageNumber}.jpg`;
+                    pageImage.alt = `${title}, page ${pageNumber} of ${pageCount}`;
+                    pageImage.className = 'portfolio-page-image';
+                    pageImage.loading = pageNumber <= 2 ? 'eager' : 'lazy';
+                    pageImage.decoding = 'async';
+                    pages.appendChild(pageImage);
+                }
+
+                portfolioViewer.src = '';
+                portfolioViewer.hidden = true;
+                portfolioPageList.replaceChildren(pages);
+                portfolioPageList.hidden = false;
+                portfolioPageList.scrollTop = 0;
+            } else {
+                portfolioPageList.hidden = true;
+                portfolioPageList.replaceChildren();
+                portfolioViewer.hidden = false;
+                portfolioViewer.src = `${pdf}#view=FitH`;
+                portfolioViewer.title = `${title} PDF viewer`;
+            }
+
             portfolioModal.classList.add('open');
             portfolioModal.setAttribute('aria-hidden', 'false');
             document.body.classList.add('modal-open');
@@ -1133,7 +1167,12 @@
             portfolioModal.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('modal-open');
             setTimeout(() => {
-                if (!portfolioModal.classList.contains('open')) portfolioViewer.src = '';
+                if (!portfolioModal.classList.contains('open')) {
+                    portfolioViewer.src = '';
+                    portfolioViewer.hidden = false;
+                    portfolioPageList.hidden = true;
+                    portfolioPageList.replaceChildren();
+                }
             }, 350);
             if (lastPortfolioTrigger) lastPortfolioTrigger.focus();
         }
