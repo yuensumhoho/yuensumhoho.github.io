@@ -997,16 +997,27 @@
 
         function updateNavIndicator(activeLink) {
             if (activeLink) {
+                const activeChanged = !activeLink.classList.contains('active');
                 const navRect = floatingNav.getBoundingClientRect();
                 const linkRect = activeLink.getBoundingClientRect();
-                const left = linkRect.left - navRect.left;
+                const left = activeLink.offsetLeft;
                 
-                navIndicator.style.width = `${linkRect.width}px`;
+                navIndicator.style.width = `${activeLink.offsetWidth}px`;
                 navIndicator.style.transform = `translateX(${left}px)`;
                 navIndicator.style.opacity = '1';
                 
                 document.querySelectorAll('.floating-nav a').forEach(a => a.classList.remove('active'));
                 activeLink.classList.add('active');
+
+                const linkOutsideView = linkRect.left < navRect.left + 5 || linkRect.right > navRect.right - 5;
+                if (floatingNav.scrollWidth > floatingNav.clientWidth && (activeChanged || linkOutsideView)) {
+                    const centeredPosition = activeLink.offsetLeft - (floatingNav.clientWidth - activeLink.offsetWidth) / 2;
+                    const maxScroll = floatingNav.scrollWidth - floatingNav.clientWidth;
+                    floatingNav.scrollTo({
+                        left: Math.max(0, Math.min(maxScroll, centeredPosition)),
+                        behavior: 'smooth'
+                    });
+                }
             } else {
                 navIndicator.style.opacity = '0';
                 document.querySelectorAll('.floating-nav a').forEach(a => a.classList.remove('active'));
