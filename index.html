@@ -834,6 +834,9 @@
         let heroScrollFrame = null;
         let introGateReleased = false;
         let touchLastY = 0;
+        let touchLastTime = 0;
+        let touchVelocity = 0;
+        let touchInertiaFrame = null;
         let introContinueTimer = null;
         let introContinueHasAppeared = false;
 
@@ -907,19 +910,55 @@
         }, { passive: false });
 
         window.addEventListener('touchstart', event => {
+            if (touchInertiaFrame !== null) {
+                cancelAnimationFrame(touchInertiaFrame);
+                touchInertiaFrame = null;
+            }
             touchLastY = event.touches[0].clientY;
+            touchLastTime = performance.now();
+            touchVelocity = 0;
         }, { passive: true });
 
         window.addEventListener('touchmove', event => {
             const currentTouchY = event.touches[0].clientY;
+            const currentTime = performance.now();
             const touchDelta = touchLastY - currentTouchY;
             touchLastY = currentTouchY;
+            const elapsed = Math.max(1, currentTime - touchLastTime);
+            touchLastTime = currentTime;
             const gatePosition = getIntroGatePosition();
-            if (!introGateReleased && introGateEnabled && touchDelta > 0 && window.scrollY >= gatePosition - 2) {
+            if (!introGateReleased && introGateEnabled && touchDelta > 0 && window.scrollY <= gatePosition + 2) {
                 event.preventDefault();
-                scrollToGatePosition(gatePosition);
+                const scaledDelta = touchDelta * 1.75;
+                touchVelocity = Math.min(3.5, scaledDelta / elapsed);
+                scrollToGatePosition(Math.min(gatePosition, window.scrollY + scaledDelta));
+            } else {
+                touchVelocity = 0;
             }
         }, { passive: false });
+
+        window.addEventListener('touchend', () => {
+            if (introGateReleased || !introGateEnabled || touchVelocity <= 0.04) return;
+
+            let previousFrameTime = performance.now();
+            const runTouchInertia = currentTime => {
+                const gatePosition = getIntroGatePosition();
+                const frameTime = Math.min(32, currentTime - previousFrameTime);
+                previousFrameTime = currentTime;
+                const nextPosition = Math.min(gatePosition, window.scrollY + touchVelocity * frameTime);
+                scrollToGatePosition(nextPosition);
+                touchVelocity *= Math.pow(0.92, frameTime / 16.67);
+
+                if (!introGateReleased && nextPosition < gatePosition && touchVelocity > 0.04) {
+                    touchInertiaFrame = requestAnimationFrame(runTouchInertia);
+                } else {
+                    touchInertiaFrame = null;
+                    touchVelocity = 0;
+                }
+            };
+
+            touchInertiaFrame = requestAnimationFrame(runTouchInertia);
+        }, { passive: true });
 
         window.addEventListener('keydown', event => {
             const downwardKeys = ['ArrowDown', 'PageDown', 'End', ' '];
@@ -935,6 +974,11 @@
 
         introContinue.addEventListener('click', event => {
             event.preventDefault();
+            if (touchInertiaFrame !== null) {
+                cancelAnimationFrame(touchInertiaFrame);
+                touchInertiaFrame = null;
+            }
+            touchVelocity = 0;
             if (introContinueTimer !== null) {
                 clearTimeout(introContinueTimer);
                 introContinueTimer = null;
