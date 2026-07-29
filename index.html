@@ -343,8 +343,6 @@
         }
 
         .nav-question {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            font-weight: 300;
             color: var(--text-primary);
             margin-bottom: 40px;
             min-height: 1.5em;
@@ -423,7 +421,7 @@
             .floating-nav::-webkit-scrollbar { display: none; }
             .floating-nav a { padding: 9px 14px; font-size: 0.8rem; }
             .nav-hub { height: auto; min-height: 100vh; min-height: 100dvh; justify-content: flex-start; padding: 72px 20px calc(72px + env(safe-area-inset-bottom)); }
-            .nav-question { margin-bottom: 28px; min-height: 0; }
+            .nav-question.section-title { margin-bottom: 28px; min-height: 0; }
             .nav-grid { display: flex; flex-direction: column; gap: 14px; max-width: 560px; }
             .nav-card { flex: none; width: 100%; min-height: 118px; padding: 20px; border-radius: 20px; gap: 10px; }
             .nav-card svg { width: 32px; height: 32px; }
@@ -434,6 +432,7 @@
         .section { padding: 100px 20px; max-width: 800px; margin: 0 auto; }
         .section-title-wrapper { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 60px; }
         .section-title { font-size: 2.5rem; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 0; }
+        .nav-question.section-title { margin-bottom: 40px; min-height: 1.5em; }
         #contact .section-title { margin-bottom: 100px; }
 
         .download-btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; transition: all 0.3s; cursor: pointer; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
@@ -504,6 +503,7 @@
         @media (max-width: 768px) {
             .section { padding: 80px 18px; }
             .section-title { font-size: clamp(2rem, 10vw, 2.5rem); }
+            .nav-question.section-title { margin-bottom: 28px; min-height: 0; }
             .skills-container { grid-template-columns: 1fr; }
             .portfolio-grid { grid-template-columns: 1fr; }
             .portfolio-modal { padding: 10px; }
@@ -575,8 +575,8 @@
             <div class="h1-wrapper">
                 <div class="opening-cover">
                     <h1 class="opening-title">
-                        <span class="opening-hello">Hey there,</span>
-                        <span class="opening-name">I'm Sum.</span>
+                        <span class="opening-hello">Hi,</span>
+                        <span class="opening-name">it's Sum</span>
                     </h1>
                     <span class="cover-role">Pattern cutter · Garment developer · Designer</span>
                 </div>
@@ -606,7 +606,7 @@
     </section>
 
     <section class="nav-hub" id="nav-hub">
-        <h2 id="nav-question" class="nav-question">Content</h2>
+        <h2 id="nav-question" class="nav-question section-title">CONTENT</h2>
         
         <div id="nav-grid" class="nav-grid">
             <a href="#portfolio" class="nav-card portfolio">
@@ -639,7 +639,7 @@
     <hr class="section-divider">
 
     <section class="section portfolio-section" id="portfolio">
-        <h2 class="section-title">Portfolio</h2>
+        <h2 class="section-title">PORTFOLIO</h2>
         <div class="portfolio-grid">
             <button type="button" class="portfolio-card" data-pdf="pdfs/ysh%20portfolio.pdf" data-title="Pattern Cutting as a Design Method" data-pages="25" data-page-prefix="images/portfolio-pages/ysh/page-" aria-haspopup="dialog">
                 <img src="images/portfolio-pages/ysh/page-01.jpg" alt="" class="portfolio-preview">
@@ -664,7 +664,7 @@
 
     <section class="section" id="experience">
         <div class="section-title-wrapper">
-            <h2 class="section-title" style="margin-bottom: 0;">Work Experience</h2>
+            <h2 class="section-title" style="margin-bottom: 0;">WORK EXPERIENCE</h2>
             <a href="pdfs/Resume.pdf" download class="download-btn" title="Download Resume">
                 <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
             </a>
@@ -756,7 +756,7 @@
 
     <section class="section" id="education">
         <div class="section-title-wrapper">
-            <h2 class="section-title" style="margin-bottom: 0;">Education</h2>
+            <h2 class="section-title" style="margin-bottom: 0;">EDUCATION</h2>
             <a href="pdfs/Resume.pdf" download class="download-btn" title="Download Resume">
                 <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
             </a>
@@ -805,7 +805,7 @@
     <hr class="section-divider">
 
     <section class="section" id="skills">
-        <h2 class="section-title">My Skills</h2>
+        <h2 class="section-title">SKILLS</h2>
         <div class="skills-container">
             <div class="skill-category">
                 <h3 class="skill-category-title">Manual</h3>
@@ -827,7 +827,7 @@
     <hr class="section-divider">
 
     <section class="section" id="mbti">
-        <h2 class="section-title">My MBTI</h2>
+        <h2 class="section-title">MBTI</h2>
         <div class="mbti-container">
             <a href="https://www.16personalities.com/entj-personality" target="_blank" class="mbti-icon-wrapper" title="Learn about ENTJ">
                 <img src="images/icons/entj.svg" alt="ENTJ Avatar" class="mbti-icon" onerror="this.src='https://ui-avatars.com/api/?name=ENTJ&background=88619A&color=fff&size=150'">
@@ -839,7 +839,7 @@
     <hr class="section-divider">
 
     <section class="section" id="contact">
-        <h2 class="section-title">Contact</h2>
+        <h2 class="section-title">CONTACT</h2>
         <div class="contact-container">
             <div class="contact-details">
                 <a href="mailto:kittste@163.com" class="contact-detail" aria-label="Email Yuen Sum Ho">
@@ -883,13 +883,13 @@
         // --- 1. Scroll-driven Background Crossfade ---
         const backgroundLayers = [...document.querySelectorAll('.webpage-bg')];
         const portfolioSection = document.getElementById('portfolio');
-        const mbtiSection = document.getElementById('mbti');
+        const experienceSection = document.getElementById('experience');
         let activeBackground = 1;
         let backgroundScrollFrame = null;
 
         function updatePageBackground() {
             const viewportFocus = window.scrollY + window.innerHeight * 0.45;
-            const nextBackground = viewportFocus >= mbtiSection.offsetTop
+            const nextBackground = viewportFocus >= experienceSection.offsetTop
                 ? 3
                 : viewportFocus >= portfolioSection.offsetTop
                     ? 2
