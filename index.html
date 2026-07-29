@@ -46,9 +46,9 @@
         }
 
         .webpage-bg.is-active { opacity: 1; }
-        .webpage-bg-1 { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/bg/1.jpg'); }
-        .webpage-bg-2 { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/bg/2.jpg'); }
-        .webpage-bg-3 { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/bg/3.jpg'); }
+        .webpage-bg-1 { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/bg/1.png'); }
+        .webpage-bg-2 { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/bg/2.png'); }
+        .webpage-bg-3 { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/bg/3.png'); }
 
         @media (prefers-reduced-motion: reduce) {
             .webpage-bg { transition-duration: 0.01ms; }
@@ -155,28 +155,67 @@
             will-change: opacity, transform, filter;
         }
 
-        h1 {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 700;
-            letter-spacing: -2px;
-            margin-bottom: 0; 
-            display: inline; 
-            background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .opening-cover {
+            width: min(980px, calc(100vw - 48px));
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        .cursor {
-            display: inline-block;
-            width: 4px; 
-            height: clamp(3rem, 8vw, 6rem); 
-            background-color: var(--accent-color);
-            margin-left: 10px;
-            animation: blink 1s infinite;
-            vertical-align: sub; 
+        .cover-role {
+            margin-top: clamp(30px, 5vh, 52px);
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.42);
+            color: rgba(255,255,255,0.68);
+            font-size: clamp(0.65rem, 1vw, 0.76rem);
+            letter-spacing: 0.18em;
+            line-height: 1.5;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: minimalFadeIn 1s ease 1s forwards;
         }
-        .cursor.stopped { display: none; }
+
+        .opening-title {
+            margin: 0;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.075em;
+            line-height: 0.86;
+        }
+
+        .opening-title span {
+            display: block;
+            opacity: 0;
+            clip-path: inset(0 100% 0 0);
+            will-change: transform, opacity, clip-path;
+        }
+
+        .opening-hello {
+            margin-bottom: 0.15em;
+            font-size: clamp(1.8rem, 4vw, 3.6rem);
+            font-weight: 400;
+            letter-spacing: -0.045em;
+            transform: translateY(20px);
+            animation: minimalTitleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+
+        .opening-name {
+            font-size: clamp(5rem, 14vw, 11rem);
+            transform: translateY(35px);
+            animation: minimalTitleReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.42s forwards;
+        }
+
+        @keyframes minimalTitleReveal {
+            to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+        }
+
+        @keyframes minimalFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .scroll-indicator {
             position: absolute;
@@ -223,8 +262,7 @@
         .intro-photo-wrap::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), inset 0 -80px 100px rgba(0,0,0,0.18); pointer-events: none; }
         .intro-photo { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 45%; }
         .intro-copy { padding: 20px 0; }
-        .intro-eyebrow { margin-bottom: 12px; color: var(--accent-color); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
-        .intro-title { margin-bottom: 24px; color: #fff; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.08; letter-spacing: -0.035em; }
+        .intro-title { margin-bottom: 24px; color: #fff; font-size: clamp(1.5rem, 3.4vw, 3.4rem); line-height: 1.08; letter-spacing: -0.035em; white-space: nowrap; }
         .intro-copy p { margin-bottom: 16px; color: rgba(245,245,247,0.82); font-size: clamp(0.94rem, 1.3vw, 1.05rem); line-height: 1.68; }
         .intro-copy p:last-child { margin-bottom: 0; color: #fff; }
         .intro-continue {
@@ -258,20 +296,39 @@
         @media (max-width: 760px) {
             .hero { height: 230vh; height: 230dvh; }
             .hero-stage { padding: 20px 20px calc(78px + env(safe-area-inset-bottom)); }
+            .opening-cover {
+                width: calc(100vw - 36px);
+                align-items: center;
+                text-align: center;
+            }
+            .cover-role { font-size: 0.58rem; }
+            .opening-title { line-height: 0.86; }
+            .opening-hello { font-size: clamp(1.8rem, 9vw, 2.7rem); }
+            .opening-name { font-size: clamp(4.5rem, 22vw, 7rem); }
             .hero-intro { grid-template-columns: 1fr; gap: 20px; text-align: center; }
             .intro-photo-wrap { width: min(165px, 43vw); aspect-ratio: 1; margin: 0 auto; border-radius: 50%; }
             .intro-photo { object-position: 50% 38%; }
             .intro-copy { padding: 0; }
-            .intro-eyebrow { margin-bottom: 6px; }
-            .intro-title { margin-bottom: 14px; font-size: clamp(1.65rem, 8vw, 2.25rem); }
+            .intro-title { margin-bottom: 14px; font-size: clamp(1rem, 5vw, 1.35rem); }
             .intro-copy p { margin-bottom: 10px; font-size: clamp(0.78rem, 3.2vw, 0.92rem); line-height: 1.45; }
             .intro-continue { bottom: calc(16px + env(safe-area-inset-bottom)); font-size: 0.82rem; }
         }
 
         @media (max-height: 680px) and (max-width: 760px) {
+            .opening-name { font-size: clamp(4.3rem, 22vw, 6.4rem); }
             .intro-photo-wrap { width: 120px; }
-            .intro-title { font-size: 1.5rem; }
+            .intro-title { font-size: clamp(1rem, 5vw, 1.2rem); }
             .intro-copy p { margin-bottom: 7px; font-size: 0.76rem; line-height: 1.35; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .opening-title span,
+            .cover-role {
+                animation: none;
+                opacity: 1;
+                transform: none;
+                clip-path: none;
+            }
         }
 
         /* --- 3.5 Navigation Hub (Bento Style) --- */
@@ -516,15 +573,20 @@
         <span class="intro-scroll-target" id="intro-start" aria-hidden="true"></span>
         <div class="hero-stage">
             <div class="h1-wrapper">
-                <div><h1 id="typewriter-h1"></h1><span id="cursor" class="cursor"></span></div>
+                <div class="opening-cover">
+                    <h1 class="opening-title">
+                        <span class="opening-hello">Hey there,</span>
+                        <span class="opening-name">I'm Sum.</span>
+                    </h1>
+                    <span class="cover-role">Pattern cutter · Garment developer · Designer</span>
+                </div>
             </div>
             <div class="hero-intro" id="hero-intro">
                 <div class="intro-photo-wrap">
                     <img src="images/icons/profile_pic.jpg" alt="Yuen Sum Ho" class="intro-photo">
                 </div>
                 <div class="intro-copy">
-                    <div class="intro-eyebrow">About me</div>
-                    <h2 class="intro-title">Welcome to my website.</h2>
+                    <h2 class="intro-title">WELCOME TO MY WEBSITE</h2>
                     <p>I'm a pattern cutter, garment developer, and designer. Over the past six years, I have studied fashion in the UK while gaining industry experience in both China and the UK.</p>
                     <p>I believe fashion is a meaningful way for people to express themselves. Seeing someone wear a garment I helped create—and feeling confident and comfortable in it—is what motivates me most.</p>
                     <p>I'm both a pattern cutter and a designer. Pattern cutting is not just a technical process for me; it is my design method.</p>
@@ -818,25 +880,7 @@
     </div>
 
     <script>
-        // --- 1. Hero Typewriter (Hello) ---
-        const helloText = "Hey there, I'm Sum.";
-        const helloElement = document.getElementById('typewriter-h1');
-        const helloCursor = document.getElementById('cursor');
-        let helloIndex = 0;
-
-        function typeHello() {
-            if (helloIndex < helloText.length) {
-                helloElement.innerHTML += helloText.charAt(helloIndex);
-                helloIndex++;
-                setTimeout(typeHello, 100);
-            } else {
-                helloCursor.classList.add('stopped');
-            }
-        }
-        
-        setTimeout(typeHello, 800);
-
-        // --- 2. Scroll-driven Background Crossfade ---
+        // --- 1. Scroll-driven Background Crossfade ---
         const backgroundLayers = [...document.querySelectorAll('.webpage-bg')];
         const portfolioSection = document.getElementById('portfolio');
         const mbtiSection = document.getElementById('mbti');
